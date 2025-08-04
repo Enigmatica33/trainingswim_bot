@@ -41,7 +41,7 @@ def say_hello(message):
 
 
 def get_design_message(warmup_level, main_level):
-    """Формирует сообщение с тренировкой"""
+    """Формирует сообщение с тренировкой."""
     result = []
     result.extend(warmup_level['texts'])
     result.append('----------------')
@@ -62,7 +62,6 @@ def get_design_message(warmup_level, main_level):
 @swimming_bot.message_handler(content_types=['text'])
 def get_train_parameters(message):
     chat_id = message.chat.id
-
     if message.text == 'Хочу тренировку! 🏊🏻':
         keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
         keyboard.row(
