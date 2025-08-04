@@ -15,6 +15,7 @@ from constants import (COOLDOWN, COOLDOWN_DISTANCE, HELLO, MIN_WARMUP_BEGINNER,
                        MAX_MAIN_PROFI)
 
 from logic import find_combinations
+from saving_pdf import create_pdf_from_text
 
 swimming_bot = TeleBot(token=TELEGRAM_BOT_TOKEN)
 
@@ -24,6 +25,7 @@ main_tasks = (
     [task for task in trainings if task['task_type'] != 'разминка'
      and task['task_type'] != 'заминка']
 )
+user_message_text = {}
 
 
 @swimming_bot.message_handler(commands=['start'])
@@ -38,6 +40,27 @@ def say_hello(message):
         text=f'{HELLO}, {message.chat.first_name}!',
         reply_markup=keyboard
     )
+
+
+def create_keyboard_for_checking_level():
+    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    keyboard.row(
+        types.KeyboardButton('Новичок'),
+        types.KeyboardButton('Опытный'),
+        types.KeyboardButton('Профи')
+    )
+    return keyboard
+
+
+def create_keyboard_for_saving_file():
+    """Создаёт инлайн-кнопку для сохранения в файл."""
+    inline_keyboard = types.InlineKeyboardMarkup()
+    save_file_btn = types.InlineKeyboardButton(
+        'Сохранить в .pdf',
+        callback_data='save'
+    )
+    inline_keyboard.add(save_file_btn)
+    return inline_keyboard
 
 
 def get_design_message(warmup_level, main_level):
@@ -62,19 +85,8 @@ def get_design_message(warmup_level, main_level):
 @swimming_bot.message_handler(content_types=['text'])
 def get_train_parameters(message):
     chat_id = message.chat.id
-    if message.text == 'Хочу тренировку! 🏊🏻':
-        keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        keyboard.row(
-            types.KeyboardButton('Новичок'),
-            types.KeyboardButton('Опытный'),
-            types.KeyboardButton('Профи')
-        )
-        swimming_bot.send_message(
-            chat_id,
-            text='Укажите свой уровень в плавании:',
-            reply_markup=keyboard)
 
-    elif message.text == 'Новичок':
+    if message.text == 'Новичок':
         warmup_for_new = random.choice(find_combinations(
             warmup_tasks,
             MIN_WARMUP_BEGINNER,
@@ -86,7 +98,13 @@ def get_train_parameters(message):
             MAX_MAIN_BEGINNER
         ))
         result_message = get_design_message(warmup_for_new, main_for_new)
-        swimming_bot.send_message(chat_id, text=f'{result_message} \n')
+        inline_keyboard = create_keyboard_for_saving_file()
+        user_message_text[message.chat.id] = result_message
+        swimming_bot.send_message(
+            chat_id,
+            text=f'{result_message} \n',
+            reply_markup=inline_keyboard
+        )
 
     elif message.text == 'Опытный':
         warmup_for_skilled = random.choice(find_combinations(
@@ -103,7 +121,13 @@ def get_train_parameters(message):
             warmup_for_skilled,
             main_for_skilled
         )
-        swimming_bot.send_message(chat_id, text=f'{result_message} \n')
+        inline_keyboard = create_keyboard_for_saving_file()
+        user_message_text[message.chat.id] = result_message
+        swimming_bot.send_message(
+            chat_id,
+            text=f'{result_message} \n',
+            reply_markup=inline_keyboard
+        )
 
     elif message.text == 'Профи':
         warmup_for_profi = random.choice(find_combinations(
@@ -120,7 +144,33 @@ def get_train_parameters(message):
             warmup_for_profi,
             main_for_profi
         )
-        swimming_bot.send_message(chat_id, text=f'{result_message} \n')
+        inline_keyboard = create_keyboard_for_saving_file()
+        user_message_text[message.chat.id] = result_message
+        swimming_bot.send_message(
+            chat_id,
+            text=f'{result_message} \n',
+            reply_markup=inline_keyboard
+        )
+    else:
+        keyboard = create_keyboard_for_checking_level()
+        swimming_bot.send_message(
+            chat_id,
+            text='Укажите свой уровень в плавании:',
+            reply_markup=keyboard)
+
+
+@swimming_bot.callback_query_handler(func=lambda call: True)
+def handle_saving_file_btn(call):
+    swimming_bot.answer_callback_query(call.id)
+    if call.data == 'save':
+        text_for_pdf = user_message_text.get(call.message.chat.id)
+        pdf_buffer = create_pdf_from_text(text_for_pdf)
+
+        if pdf_buffer:
+            swimming_bot.send_document(
+                chat_id=call.message.chat.id,
+                document=(f'swim_training_{call.message.chat.username}.pdf', pdf_buffer)
+            )
 
 
 swimming_bot.polling(60)
