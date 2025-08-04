@@ -23,7 +23,11 @@ def find_combinations(tasks, min_dist, max_dist):
         if min_dist <= current_distance <= max_dist:
             # Если да, извлекаем тексты и добавляем в общий список результатов
             texts = [task['text'] for task in current_combo]
-            results.append(texts)
+            result_item = {
+                'texts': texts,
+                'total_distance': current_distance
+            }
+            results.append(result_item)
 
         # 2. Условие остановки рекурсии: если сумма уже превысила максимум
         # или мы перебрали все задачи, то дальше идти нет смысла.
