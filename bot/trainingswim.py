@@ -1,4 +1,6 @@
+import logging
 import random
+import sys
 
 import requests
 from telebot import TeleBot, types
@@ -23,6 +25,14 @@ from constants import (
 )
 from logic import find_combinations
 from saving_pdf import create_pdf_from_text
+
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+handler = logging.StreamHandler(stream=sys.stdout)
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 
 swimming_bot = TeleBot(token=TELEGRAM_BOT_TOKEN)
 
