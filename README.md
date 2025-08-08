@@ -13,3 +13,5 @@ pyTelegramBotAPI
 ## Пример работы бота
 https://github.com/user-attachments/assets/2743a441-7288-4cb2-88e8-530a0ef5c469
 
+## Логирование
+![photo_2025-08-08_16-55-26](https://github.com/user-attachments/assets/7b253dbe-5ea9-4b0c-b399-1a0d539b9a3d)
