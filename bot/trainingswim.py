@@ -10,18 +10,7 @@ from constants import (
     COOLDOWN,
     COOLDOWN_DISTANCE,
     HELLO,
-    MAX_MAIN_BEGINNER,
-    MAX_MAIN_PROFI,
-    MAX_MAIN_SKILLED,
-    MAX_WARMUP_BEGINNER,
-    MAX_WARMUP_PROFI,
-    MAX_WARMUP_SKILLED,
-    MIN_MAIN_BEGINNER,
-    MIN_MAIN_PROFI,
-    MIN_MAIN_SKILLED,
-    MIN_WARMUP_BEGINNER,
-    MIN_WARMUP_PROFI,
-    MIN_WARMUP_SKILLED,
+    LEVEL_PARAMETERS
 )
 from exceptions import MissingTokens
 from logic import find_combinations
@@ -38,27 +27,6 @@ if not logger.handlers:
     logger.addHandler(handler)
 
 swimming_bot = TeleBot(token=TELEGRAM_BOT_TOKEN)
-
-LEVEL_PARAMETERS = {
-    'Новичок': {
-        'min_warmup': MIN_WARMUP_BEGINNER,
-        'max_warmup': MAX_WARMUP_BEGINNER,
-        'min_main': MIN_MAIN_BEGINNER,
-        'max_main': MAX_MAIN_BEGINNER,
-    },
-    'Опытный': {
-        'min_warmup': MIN_WARMUP_SKILLED,
-        'max_warmup': MAX_WARMUP_SKILLED,
-        'min_main': MIN_MAIN_SKILLED,
-        'max_main': MAX_MAIN_SKILLED,
-    },
-    'Профи': {
-        'min_warmup': MIN_WARMUP_PROFI,
-        'max_warmup': MAX_WARMUP_PROFI,
-        'min_main': MIN_MAIN_PROFI,
-        'max_main': MAX_MAIN_PROFI,
-    }
-}
 
 
 def check_tokens():
