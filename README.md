@@ -12,4 +12,3 @@ pyTelegramBotAPI
 
 ## Пример работы бота
 https://github.com/user-attachments/assets/2743a441-7288-4cb2-88e8-530a0ef5c469
-
