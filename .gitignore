@@ -209,3 +209,5 @@ __marimo__/
 TrainingSwimBot.txt
 DejaVuSans.ttf
 data/
+pyproject.toml
+.flake8

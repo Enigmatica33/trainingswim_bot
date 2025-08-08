@@ -1,19 +1,26 @@
 import random
+
 import requests
 from telebot import TeleBot, types
 
-from config import (
-    TELEGRAM_BOT_TOKEN,
-    ENDPOINT
+from config import ENDPOINT, TELEGRAM_BOT_TOKEN
+from constants import (
+    COOLDOWN,
+    COOLDOWN_DISTANCE,
+    HELLO,
+    MAX_MAIN_BEGINNER,
+    MAX_MAIN_PROFI,
+    MAX_MAIN_SKILLED,
+    MAX_WARMUP_BEGINNER,
+    MAX_WARMUP_PROFI,
+    MAX_WARMUP_SKILLED,
+    MIN_MAIN_BEGINNER,
+    MIN_MAIN_PROFI,
+    MIN_MAIN_SKILLED,
+    MIN_WARMUP_BEGINNER,
+    MIN_WARMUP_PROFI,
+    MIN_WARMUP_SKILLED,
 )
-
-from constants import (COOLDOWN, COOLDOWN_DISTANCE, HELLO, MIN_WARMUP_BEGINNER,
-                       MAX_WARMUP_BEGINNER, MIN_MAIN_BEGINNER,
-                       MAX_MAIN_BEGINNER, MIN_WARMUP_SKILLED,
-                       MAX_WARMUP_SKILLED, MIN_MAIN_SKILLED, MAX_MAIN_SKILLED,
-                       MIN_WARMUP_PROFI, MAX_WARMUP_PROFI, MIN_MAIN_PROFI,
-                       MAX_MAIN_PROFI)
-
 from logic import find_combinations
 from saving_pdf import create_pdf_from_text
 
@@ -169,7 +176,7 @@ def handle_saving_file_btn(call):
         if pdf_buffer:
             swimming_bot.send_document(
                 chat_id=call.message.chat.id,
-                document=(f'swim_training_{call.message.chat.username}.pdf', pdf_buffer)
+                document=('swim_training.pdf', pdf_buffer)
             )
 
 

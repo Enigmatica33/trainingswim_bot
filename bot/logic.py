@@ -1,3 +1,6 @@
+"""Обработка ответа от API,
+выборка тренировок с учётом заданных параметров.
+"""
 import requests
 
 from config import ENDPOINT
@@ -39,7 +42,10 @@ def find_combinations(tasks, min_dist, max_dist):
             task = tasks[i]
             # Рекурсивный вызов: "включаем" текущую задачу в комбинацию
             # и ищем дальше, начиная со следующей задачи (i + 1)
-            find_recursive(i + 1, current_combo + [task], current_distance + task['distance'])
+            find_recursive(
+                i + 1,
+                current_combo + [task], current_distance + task['distance']
+            )
 
     # Запускаем рекурсивный поиск с самого начала
     find_recursive(0, [], 0)

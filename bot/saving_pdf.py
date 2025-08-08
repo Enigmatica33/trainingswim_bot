@@ -6,11 +6,14 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
 
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+
 
 def create_pdf_from_text(text: str):
-    """
-    Создает PDF-файл из переданного текста.
-    """
+    """Создает PDF-файл из переданного текста."""
     try:
         buffer = BytesIO()
         pdfmetrics.registerFont(TTFont('DejaVu', 'DejaVuSans.ttf'))
