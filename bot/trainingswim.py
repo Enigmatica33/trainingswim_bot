@@ -59,7 +59,9 @@ def load_trainings():
         return warmup, main
     except requests.exceptions.RequestException as e:
         logger.error(f'Не удалось загрузить тренировки: {e}')
-        raise SystemExit('Ошибка: не удалось получить данные для запуска бота.')
+        raise SystemExit(
+            'Ошибка: не удалось получить данные для запуска бота.'
+        )
     except Exception as e:
         logger.error(f'Произошла ошибка при обработке данных: {e}')
         raise SystemExit('Ошибка: неверный формат данных от API.')
